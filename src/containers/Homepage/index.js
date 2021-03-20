@@ -7,6 +7,7 @@ import {
 	Slider,
 	BackgroundChoice,
 	Modal,
+	Loading,
 } from '../../components';
 
 import { Images } from '../../themes';
@@ -17,6 +18,8 @@ function Homepage() {
 	const [slidePicked, setSlidePicked] = useState('');
 	const [isOpenModal, setIsOpenModal] = useState('');
 	const [background, setBackground] = useState('');
+	const [isLoading, setIsLoading] = useState(true);
+	const [isLoaded, setIsLoaded] = useState(false);
 
 	const dateTimePickerCallback = (dataPicked) => {
 		const timePicked = dataPicked.time;
@@ -42,25 +45,36 @@ function Homepage() {
 		setBackground(img);
 	};
 	useEffect(() => {}, [background]);
+
+	useEffect(() => {
+		setTimeout(() => {
+			setIsLoaded(!isLoaded);
+			setIsLoading(!setIsLoading);
+		}, 2000);
+	}, []);
+
 	return (
 		<ContainerApp>
 			<GlobalStyle />
-			<Main imgUrl={background ? background : Images[0].img.default}>
-				<Modal
-					images={Images}
-					openModal={isOpenModal}
-					callbackType={changeBackgroundCallback}
-					callbackImg={selectedBackground}
-				></Modal>
-				<Slider sliderText={slidePicked} />
-				<DateTimePicker callback={dateTimePickerCallback} />
-				<Countdown selectedDay={selectedDay} callback={countdownCallback} />
-				<Copyright>Copyright by Thinh </Copyright>
-				<BackgroundChoice
-					image={Images[0].img.default}
-					callback={changeBackgroundCallback}
-				/>
-			</Main>
+			{isLoaded && (
+				<Main imgUrl={background ? background : Images[0].img.default}>
+					<Modal
+						images={Images}
+						openModal={isOpenModal}
+						callbackType={changeBackgroundCallback}
+						callbackImg={selectedBackground}
+					></Modal>
+					<Slider sliderText={slidePicked} />
+					<DateTimePicker callback={dateTimePickerCallback} />
+					<Countdown selectedDay={selectedDay} callback={countdownCallback} />
+					<Copyright>Copyright by Thinh </Copyright>
+					<BackgroundChoice
+						image={Images[0].img.default}
+						callback={changeBackgroundCallback}
+					/>
+				</Main>
+			)}
+			{isLoading && <Loading imgUrl={Images[0].img.default} />}
 		</ContainerApp>
 	);
 }

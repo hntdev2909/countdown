@@ -4,6 +4,7 @@ import DateTimePicker from './DateTimePicker';
 import EndCountdown from './EndCountdown';
 import Slider from './Slider';
 import Modal from './Modal';
+import Loading from './Loading';
 
 export {
 	BackgroundChoice,
@@ -12,4 +13,5 @@ export {
 	EndCountdown,
 	Slider,
 	Modal,
+	Loading,
 };
