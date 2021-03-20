@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 
 import { CountDownBox, CountDownTime, Time, Span } from './Countdown.styles';
 
-function Count({ selectedDay }) {
+function Count({ selectedDay, callback }) {
 	const calculateTimeLeft = (picktime) => {
 		const timeSelected = picktime || '2022-02-01 00:00:00';
 
@@ -15,7 +15,13 @@ function Count({ selectedDay }) {
 				seconds: Math.floor((difference / 1000) % 60),
 			};
 
-			if (timeLeft.seconds === 0) {
+			if (
+				timeLeft.days === 0 &&
+				timeLeft.hours === 0 &&
+				timeLeft.minutes === 0 &&
+				timeLeft.seconds === 0
+			) {
+				callback(true);
 				setOverTime(true);
 			}
 			return timeLeft;
@@ -35,7 +41,7 @@ function Count({ selectedDay }) {
 
 	useEffect(() => {
 		const timer = setInterval(() => {
-			console.log("It's still running");
+			// console.log("It's still running");
 			setTime(calculateTimeLeft(selectedDay));
 		}, 1000);
 

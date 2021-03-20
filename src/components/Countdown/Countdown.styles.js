@@ -28,7 +28,7 @@ const CountDownTime = styled.div`
 `;
 const CountDownBox = styled.div`
 	display: flex;
-	z-index: 3;
+	// z-index: 3;
 `;
 
 export { CountDownBox, CountDownTime, Time, Span };

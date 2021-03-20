@@ -18,7 +18,7 @@ const TimeDiv = styled.div`
 const TimeChoice = styled.div`
 	display: flex;
 	flex-direction: column;
-	z-index: 3;
+	z-index: 0;
 `;
 
 export { TextDateTime, Title, TimeChoiceInput, TimeDiv, TimeChoice };

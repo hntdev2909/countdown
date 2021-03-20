@@ -31,40 +31,44 @@ function DateTimePicker({ callback }) {
 	};
 
 	useEffect(() => {
-		FestivalDay.map((item) => {
+		const data = [...listFestival];
+		FestivalDay.forEach((item) => {
 			const difference = +new Date(`2021-${item.time} 00:00:00`) - +new Date();
 			if (difference < 0) {
-				listFestival.push({
+				data.push({
 					time: `2022-${item.time} 00:00:00`,
 					name: item.name,
 				});
 			} else {
-				listFestival.push({
+				data.push({
 					time: `2021-${item.time} 00:00:00`,
 					name: item.name,
 				});
 			}
+			return data;
 		});
+		setListFestival(data);
 	}, []);
 
 	const disabledDate = (current) => {
-		let customDate = '2021-03-19';
-		return current && current < moment(customDate, 'YYYY-MM-DD');
+		let customDate = new Date();
+		return current && current < moment(customDate.getDate(), 'YYYY-MM-DD');
+	};
+
+	const handleText = (e) => {
+		console.log(e);
 	};
 
 	useEffect(() => {
-		if (selectedDay) {
-			callback(selectedDay);
+		if (_.includes(selectedDay, '+')) {
+			const data = _.split(selectedDay, '+');
+			callback({ time: data[0], name: data[1] });
 		}
+		callback({ time: selectedDay });
 	}, [selectedDay]);
 
 	return (
 		<TimeChoice>
-			<Title marginBottom="25px">
-				<TextDateTime fontSize="3.4rem" fontWeight="600" textAlign="center">
-					COUNTDOWN TEMPLATE
-				</TextDateTime>
-			</Title>
 			<TimeDiv>
 				<Space style={{ width: 300 }} direction="vertical" size={15}>
 					<DatePicker
@@ -89,7 +93,7 @@ function DateTimePicker({ callback }) {
 				>
 					{_.map(listFestival, (item, index) => {
 						return (
-							<Option key={index} value={item.time}>
+							<Option key={index} value={`${item.time}+${item.name}`}>
 								{item.name}
 							</Option>
 						);
