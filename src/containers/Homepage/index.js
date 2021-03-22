@@ -8,6 +8,7 @@ import {
 	BackgroundChoice,
 	Modal,
 	Loading,
+	EndCountdown,
 } from '../../components';
 
 import { Images } from '../../themes';
@@ -20,6 +21,7 @@ function Homepage() {
 	const [background, setBackground] = useState('');
 	const [isLoading, setIsLoading] = useState(true);
 	const [isLoaded, setIsLoaded] = useState(false);
+	const [isReset, setIsReset] = useState(false);
 
 	const dateTimePickerCallback = (dataPicked) => {
 		const timePicked = dataPicked.time;
@@ -44,37 +46,40 @@ function Homepage() {
 	const selectedBackground = (img) => {
 		setBackground(img);
 	};
-	useEffect(() => {}, [background]);
 
-	useEffect(() => {
-		setTimeout(() => {
-			setIsLoaded(!isLoaded);
-			setIsLoading(!setIsLoading);
-		}, 2000);
-	}, []);
+	const callbackReset = (action) => {
+		if (action) {
+			setSelectedDay(null);
+			setSlidePicked('');
+			setIsEndTime(false);
+		}
+	};
+
+	useEffect(() => {}, [background]);
 
 	return (
 		<ContainerApp>
 			<GlobalStyle />
-			{isLoaded && (
-				<Main imgUrl={background ? background : Images[0].img.default}>
-					<Modal
-						images={Images}
-						openModal={isOpenModal}
-						callbackType={changeBackgroundCallback}
-						callbackImg={selectedBackground}
-					></Modal>
+			<Main imgUrl={background ? background : Images[0].img.default}>
+				<Modal
+					images={Images}
+					openModal={isOpenModal}
+					callbackType={changeBackgroundCallback}
+					callbackImg={selectedBackground}
+				></Modal>
+				{isEndTime ? (
+					<EndCountdown callback={callbackReset} />
+				) : (
 					<Slider sliderText={slidePicked} />
-					<DateTimePicker callback={dateTimePickerCallback} />
-					<Countdown selectedDay={selectedDay} callback={countdownCallback} />
-					<Copyright>Copyright by Thinh </Copyright>
-					<BackgroundChoice
-						image={Images[0].img.default}
-						callback={changeBackgroundCallback}
-					/>
-				</Main>
-			)}
-			{isLoading && <Loading imgUrl={Images[0].img.default} />}
+				)}
+				<DateTimePicker callback={dateTimePickerCallback} />
+				<Countdown selectedDay={selectedDay} callback={countdownCallback} />
+				{/* <Copyright>Copyright by Thinh </Copyright> */}
+				<BackgroundChoice
+					image={Images[0].img.default}
+					callback={changeBackgroundCallback}
+				/>
+			</Main>
 		</ContainerApp>
 	);
 }

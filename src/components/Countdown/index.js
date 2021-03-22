@@ -40,6 +40,10 @@ function Count({ selectedDay, callback }) {
 	const [overTime, setOverTime] = useState(false);
 
 	useEffect(() => {
+		if (selectedDay) {
+			setOverTime(false);
+		}
+
 		const timer = setInterval(() => {
 			// console.log("It's still running");
 			setTime(calculateTimeLeft(selectedDay));
@@ -58,25 +62,25 @@ function Count({ selectedDay, callback }) {
 				<Time fontSize="6rem">
 					{time.days < 10 ? '0' + time.days : time.days}
 				</Time>
-				<Span>Ngày</Span>
+				<Span>Days</Span>
 			</CountDownTime>
 			<CountDownTime>
 				<Time fontSize="6rem">
 					{time.hours < 10 ? '0' + time.hours : time.hours}
 				</Time>
-				<Span>Giờ</Span>
+				<Span>Hours</Span>
 			</CountDownTime>
 			<CountDownTime>
 				<Time fontSize="6rem">
 					{time.minutes < 10 ? '0' + time.minutes : time.minutes}
 				</Time>
-				<Span>Phút</Span>
+				<Span>Minutes</Span>
 			</CountDownTime>
 			<CountDownTime>
 				<Time fontSize="6rem">
 					{time.seconds < 10 ? '0' + time.seconds : time.seconds}
 				</Time>
-				<Span>Giây</Span>
+				<Span>Seconds</Span>
 			</CountDownTime>
 		</CountDownBox>
 	);

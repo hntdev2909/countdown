@@ -44,7 +44,8 @@ const ModalImage = styled.div`
 	background-position: center center;
 	background-repeat: no-repeat;
 	margin: 8px;
-	border: 2px solid #ccc;
+	border: ${(props) =>
+		props.border ? `4px solid ${props.border}` : '2px solid #ccc'};
 	transition: all linear 0.1s;
 	border-radius: 5px;
 

@@ -1,12 +1,7 @@
 import { useState, useEffect } from 'react';
 import FestivalDay from './festivalDay.json';
-import {
-	TextDateTime,
-	Title,
-	TimeDiv,
-	TimeChoice,
-} from './DateTimePicker.styles';
-import { DatePicker, Space, Select } from 'antd';
+import { TimeDiv, TimeChoice } from './DateTimePicker.styles';
+import { TimePicker, DatePicker, Space, Select } from 'antd';
 import _ from 'lodash';
 import moment from 'moment';
 
@@ -17,18 +12,39 @@ function DateTimePicker({ callback }) {
 	const [option, setOption] = useState('');
 	const [listFestival, setListFestival] = useState([]);
 	const [selectedDay, setSelectedDate] = useState('');
+	const [time, setTime] = useState('');
+
+	const onChange = (value, dateString) => {
+		setOption(null);
+		setDate(value);
+	};
+
+	const handleChangeTime = (value) => {
+		setTime(value);
+	};
 
 	const handleChangeDate = (dayChoice) => {
 		setDate(null);
 		setOption(dayChoice);
 		setSelectedDate(dayChoice);
+		setTime(null);
 	};
 
-	const onChange = (value, dateString) => {
-		setOption(null);
-		setDate(value);
-		setSelectedDate(dateString);
+	const disabledDate = (current) => {
+		return current && current.valueOf() < moment().startOf('day');
 	};
+
+	useEffect(() => {
+		if (date && time) {
+			const afterNow = date.format('L') + ' ' + time.format('HH:mm:ss');
+			const beforeNow = moment().add(15, 's');
+			if (moment() > afterNow) {
+				setSelectedDate(afterNow);
+			} else {
+				setSelectedDate(beforeNow.format('L HH:mm:ss'));
+			}
+		}
+	}, [date, time]);
 
 	useEffect(() => {
 		const data = [...listFestival];
@@ -45,21 +61,13 @@ function DateTimePicker({ callback }) {
 					name: item.name,
 				});
 			}
-			return data;
+			// return data;
 		});
 		setListFestival(data);
 	}, []);
 
-	const disabledDate = (current) => {
-		let customDate = new Date();
-		return current && current < moment(customDate.getDate(), 'YYYY-MM-DD');
-	};
-
-	const handleText = (e) => {
-		console.log(e);
-	};
-
 	useEffect(() => {
+		// console.log(selectedDay);
 		if (_.includes(selectedDay, '+')) {
 			const data = _.split(selectedDay, '+');
 			callback({ time: data[0], name: data[1] });
@@ -70,26 +78,23 @@ function DateTimePicker({ callback }) {
 	return (
 		<TimeChoice>
 			<TimeDiv>
-				<Space style={{ width: 300 }} direction="vertical" size={15}>
+				<Space style={{ width: 280 }} direction="vertical" size={15}>
 					<DatePicker
-						style={{ width: 300 }}
-						showTime
+						style={{ width: 280 }}
+						size="large"
 						onChange={onChange}
 						disabledDate={disabledDate}
 						value={date}
 					/>
 				</Space>
-
+				<TimePicker size="large" onChange={handleChangeTime} value={time} />
 				<Select
+					size="large"
 					showSearch
-					style={{ width: 500 }}
+					style={{ width: 450 }}
 					placeholder="Select a day"
-					optionFilterProp="children"
 					onChange={handleChangeDate}
 					value={option}
-					filterOption={(input, option) =>
-						option.children.toLowerCase().indexOf(input.toLowerCase()) >= 0
-					}
 				>
 					{_.map(listFestival, (item, index) => {
 						return (
