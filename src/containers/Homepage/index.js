@@ -19,13 +19,15 @@ function Homepage() {
 	const [slidePicked, setSlidePicked] = useState('');
 	const [isOpenModal, setIsOpenModal] = useState('');
 	const [background, setBackground] = useState('');
-	const [isLoading, setIsLoading] = useState(true);
-	const [isLoaded, setIsLoaded] = useState(false);
 	const [isReset, setIsReset] = useState(false);
 
 	const dateTimePickerCallback = (dataPicked) => {
 		const timePicked = dataPicked.time;
 		const namePicked = dataPicked.name;
+		if (dataPicked) {
+			setIsEndTime(false);
+		}
+
 		if (!timePicked.includes('+')) {
 			setSelectedDay(timePicked);
 		}
@@ -72,11 +74,15 @@ function Homepage() {
 				) : (
 					<Slider sliderText={slidePicked} />
 				)}
-				<DateTimePicker callback={dateTimePickerCallback} />
+				<DateTimePicker
+					callback={dateTimePickerCallback}
+					resetCalendar={isEndTime}
+					newDate={selectedDay}
+				/>
 				<Countdown selectedDay={selectedDay} callback={countdownCallback} />
 				{/* <Copyright>Copyright by Thinh </Copyright> */}
 				<BackgroundChoice
-					image={Images[0].img.default}
+					image={background ? background : Images[0].img.default}
 					callback={changeBackgroundCallback}
 				/>
 			</Main>

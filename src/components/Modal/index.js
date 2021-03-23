@@ -39,8 +39,6 @@ function Modal({ images, openModal, callbackType, callbackImg }) {
 		setDisplayModal(openModal);
 	}, [openModal]);
 
-	console.log(listImages);
-
 	return (
 		<ModalContent display={displayModal}>
 			<ModalBox>

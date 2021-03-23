@@ -7,7 +7,7 @@ import moment from 'moment';
 
 const { Option } = Select;
 
-function DateTimePicker({ callback }) {
+function DateTimePicker({ callback, resetCalendar, newDate }) {
 	const [date, setDate] = useState('');
 	const [option, setOption] = useState('');
 	const [listFestival, setListFestival] = useState([]);
@@ -38,7 +38,7 @@ function DateTimePicker({ callback }) {
 		if (date && time) {
 			const afterNow = date.format('L') + ' ' + time.format('HH:mm:ss');
 			const beforeNow = moment().add(15, 's');
-			if (moment() > afterNow) {
+			if (moment().format('L HH:mm:ss') < afterNow) {
 				setSelectedDate(afterNow);
 			} else {
 				setSelectedDate(beforeNow.format('L HH:mm:ss'));
@@ -67,13 +67,19 @@ function DateTimePicker({ callback }) {
 	}, []);
 
 	useEffect(() => {
-		// console.log(selectedDay);
 		if (_.includes(selectedDay, '+')) {
 			const data = _.split(selectedDay, '+');
 			callback({ time: data[0], name: data[1] });
 		}
 		callback({ time: selectedDay });
 	}, [selectedDay]);
+
+	useEffect(() => {
+		if (!resetCalendar && newDate !== selectedDay) {
+			setDate(null);
+			setTime(null);
+		}
+	}, [resetCalendar, newDate]);
 
 	return (
 		<TimeChoice>
