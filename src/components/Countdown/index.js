@@ -1,12 +1,14 @@
 import { useState, useEffect } from 'react';
-
+import { useSelector, useDispatch } from 'react-redux';
 import { CountDownBox, CountDownTime, Time, Span } from './Countdown.styles';
+import { timeUp } from '../../redux';
 
-function Count({ selectedDay, callback }) {
+function Count() {
+	const { dateAndTime, listPicked } = useSelector((state) => state.dateTime);
+	const dispatch = useDispatch();
 	const calculateTimeLeft = (picktime) => {
-		const timeSelected = picktime || '2022-02-01 00:00:00';
-
-		const difference = +new Date(timeSelected) - +new Date();
+		const difference =
+			+new Date(picktime || '2022-02-01 00:00:00') - +new Date();
 		if (difference > 0) {
 			const timeLeft = {
 				days: Math.floor(difference / (1000 * 24 * 60 * 60)),
@@ -21,7 +23,7 @@ function Count({ selectedDay, callback }) {
 				timeLeft.minutes === 0 &&
 				timeLeft.seconds === 0
 			) {
-				callback(true);
+				dispatch(timeUp());
 				setOverTime(true);
 			}
 			return timeLeft;
@@ -40,13 +42,18 @@ function Count({ selectedDay, callback }) {
 	const [overTime, setOverTime] = useState(false);
 
 	useEffect(() => {
-		if (selectedDay) {
+		if (dateAndTime || listPicked) {
 			setOverTime(false);
+		}
+		let tmpTime;
+		if (dateAndTime) {
+			tmpTime = dateAndTime;
+		} else {
+			tmpTime = listPicked.time;
 		}
 
 		const timer = setInterval(() => {
-			// console.log("It's still running");
-			setTime(calculateTimeLeft(selectedDay));
+			setTime(calculateTimeLeft(tmpTime));
 		}, 1000);
 
 		if (overTime) {
@@ -54,7 +61,7 @@ function Count({ selectedDay, callback }) {
 		}
 
 		return () => clearInterval(timer);
-	}, [selectedDay, overTime]);
+	}, [dateAndTime, listPicked]);
 
 	return (
 		<CountDownBox>

@@ -1,3 +1,7 @@
+# Tasks
+
+- Redux, redux thunk
+
 # Project Countdown
 
 Project to understand how props are transmitted between components before coming to redux

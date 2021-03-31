@@ -10,82 +10,72 @@ import {
 	Loading,
 	EndCountdown,
 } from '../../components';
-
-import { Images } from '../../themes';
+import { useSelector, useDispatch } from 'react-redux';
+import { loadLocal, loadLocalTime } from '../../redux';
 
 function Homepage() {
-	const [selectedDay, setSelectedDay] = useState(null);
-	const [isEndTime, setIsEndTime] = useState(false);
-	const [slidePicked, setSlidePicked] = useState('');
-	const [isOpenModal, setIsOpenModal] = useState('');
-	const [background, setBackground] = useState('');
-	const [isReset, setIsReset] = useState(false);
+	const [isLoading, setIsLoading] = useState(true);
 
-	const dateTimePickerCallback = (dataPicked) => {
-		const timePicked = dataPicked.time;
-		const namePicked = dataPicked.name;
-		if (dataPicked) {
-			setIsEndTime(false);
+	const dispatch = useDispatch();
+	const { backgroundLink, backgroundList } = useSelector(
+		(state) => state.bgChoice
+	);
+	const countdown = useSelector((state) => state.countdown.timeUp);
+
+	useEffect(() => {
+		const dataLocal = localStorage.getItem('count-down');
+		const parseDataLocal = JSON.parse(dataLocal);
+		if (dataLocal) {
+			if (parseDataLocal.backgroundLink) {
+				dispatch(loadLocal(parseDataLocal.backgroundLink));
+			}
+
+			if (parseDataLocal.dateAndTime) {
+				dispatch(
+					loadLocalTime({
+						time: parseDataLocal.dateAndTime,
+						typeOfTime: 'dateAndTime',
+					})
+				);
+			}
+			if (parseDataLocal.listPicked) {
+				dispatch(
+					loadLocalTime({
+						time: parseDataLocal.listPicked,
+						typeOfTime: 'listPicked',
+					})
+				);
+			}
 		}
 
-		if (!timePicked.includes('+')) {
-			setSelectedDay(timePicked);
-		}
+		const timerLoading = setTimeout(() => {
+			setIsLoading(!isLoading);
+		}, 500);
 
-		if (namePicked) {
-			setSlidePicked(namePicked);
-		}
-	};
-
-	const countdownCallback = (mode) => {
-		setIsEndTime(mode);
-	};
-
-	const changeBackgroundCallback = (type) => {
-		setIsOpenModal(type);
-	};
-
-	const selectedBackground = (img) => {
-		setBackground(img);
-	};
-
-	const callbackReset = (action) => {
-		if (action) {
-			setSelectedDay(null);
-			setSlidePicked('');
-			setIsEndTime(false);
-		}
-	};
-
-	useEffect(() => {}, [background]);
+		return () => clearTimeout(timerLoading);
+	}, []);
 
 	return (
 		<ContainerApp>
 			<GlobalStyle />
-			<Main imgUrl={background ? background : Images[0].img.default}>
-				<Modal
-					images={Images}
-					openModal={isOpenModal}
-					callbackType={changeBackgroundCallback}
-					callbackImg={selectedBackground}
-				></Modal>
-				{isEndTime ? (
-					<EndCountdown callback={callbackReset} />
-				) : (
-					<Slider sliderText={slidePicked} />
-				)}
-				<DateTimePicker
-					callback={dateTimePickerCallback}
-					resetCalendar={isEndTime}
-					newDate={selectedDay}
-				/>
-				<Countdown selectedDay={selectedDay} callback={countdownCallback} />
-				{/* <Copyright>Copyright by Thinh </Copyright> */}
-				<BackgroundChoice
-					image={background ? background : Images[0].img.default}
-					callback={changeBackgroundCallback}
-				/>
-			</Main>
+			{isLoading ? (
+				''
+			) : (
+				<Main
+					imgUrl={
+						backgroundLink.img
+							? backgroundLink?.img?.default
+							: backgroundList[0].img.default
+					}
+				>
+					<Modal></Modal>
+					{countdown ? <EndCountdown /> : <Slider />}
+					<DateTimePicker />
+					<Countdown />
+					{/* <Copyright>Copyright by Thinh </Copyright> */}
+					<BackgroundChoice />
+				</Main>
+			)}
 		</ContainerApp>
 	);
 }

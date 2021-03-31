@@ -9,48 +9,35 @@ import {
 	ModalText,
 } from './Modal.styles';
 import _ from 'lodash';
-
+import { useDispatch, useSelector } from 'react-redux';
+import { selectBackground, changeBackground, openModal } from '../../redux';
 import { Button } from 'antd';
 
-function Modal({ images, openModal, callbackType, callbackImg }) {
-	const [displayModal, setDisplayModal] = useState('none');
-	const [img, setImg] = useState('');
-	const [listImages, setListImages] = useState(images);
+function Modal() {
 	const [selectImg, setSelectImg] = useState('red');
 
+	const { isOpenModal, backgroundList } = useSelector(
+		(state) => state.bgChoice
+	);
+	const dispatch = useDispatch();
+
 	const handleChangeBg = () => {
-		setDisplayModal('none');
-		callbackType('none');
-		callbackImg(img);
+		dispatch(openModal());
+		dispatch(changeBackground());
 	};
-
-	const handleSelectImg = (index) => {
-		const tmpListImg = [...listImages];
-		const image = tmpListImg[index].img.default;
-
-		_.map(tmpListImg, (image) => (image.selected = false));
-
-		tmpListImg[index].selected = true;
-		setListImages(tmpListImg);
-		setImg(image);
-	};
-
-	useEffect(() => {
-		setDisplayModal(openModal);
-	}, [openModal]);
 
 	return (
-		<ModalContent display={displayModal}>
+		<ModalContent display={isOpenModal ? 'flex' : 'none'}>
 			<ModalBox>
 				<ModaElement padding="16px 16px 0 16px">
 					<ModalText>Change background</ModalText>
 				</ModaElement>
 				<ModaElement flex="1">
-					{listImages &&
-						listImages.map((item, index) => {
+					{backgroundList &&
+						backgroundList.map((item, index) => {
 							return (
 								<ModalImage
-									onClick={() => handleSelectImg(index)}
+									onClick={() => dispatch(selectBackground(index))}
 									key={index}
 									img={item.img.default}
 									border={item.selected && selectImg}

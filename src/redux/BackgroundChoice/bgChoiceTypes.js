@@ -1,0 +1,5 @@
+export const CHANGE_BACKGROUND = 'CHANGE_BACKGROUND';
+export const OPEN_MODAL = 'OPEN_MODAL';
+export const SELECT_BACKGROUND = 'SELECT_BACKGROUND';
+export const LOAD_IMAGES = 'LOAD_IMAGES';
+export const LOAD_LOCAL = 'LOAD_LOCAL';

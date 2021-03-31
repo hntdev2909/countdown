@@ -1,16 +1,28 @@
 import React from 'react';
 import { BackgroundContent, BackgroundButton } from './BackgroundChoice.styles';
+import { openModal } from '../../redux';
+import { useDispatch, useSelector } from 'react-redux';
 
-function BackgroundChoice({ image, callback }) {
+function BackgroundChoice() {
+	const dispatch = useDispatch();
+
+	const { backgroundLink, backgroundList } = useSelector(
+		(state) => state.bgChoice
+	);
+
 	const handleChangeBg = () => {
-		callback('flex');
+		dispatch(openModal());
 	};
 
 	return (
 		<BackgroundContent>
 			<BackgroundButton
 				onClick={() => handleChangeBg()}
-				bgImage={image}
+				bgImage={
+					backgroundLink.img
+						? backgroundLink?.img?.default
+						: backgroundList[0].img.default
+				}
 			></BackgroundButton>
 		</BackgroundContent>
 	);

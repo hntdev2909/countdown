@@ -1,10 +1,15 @@
 import React from 'react';
 import { EndCdContent, EndCdBox, ResetBtn } from './EndCountdown.styles';
 import { Button } from 'antd';
+import { useDispatch } from 'react-redux';
+import { resetTimeUp, resetDateTime } from '../../redux';
 
 function EndCountdown({ callback }) {
+	const dispatch = useDispatch();
+
 	const handleReset = () => {
-		callback(true);
+		dispatch(resetTimeUp());
+		dispatch(resetDateTime());
 	};
 
 	return (
