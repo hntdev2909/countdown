@@ -1,7 +1,3 @@
-# Tasks
-
-- Redux, redux thunk
-
 # Project Countdown
 
 Project to understand how props are transmitted between components before coming to redux
@@ -31,8 +27,9 @@ npm start
 - Two options for Countdown:
   - Select time from Calendar
   - Select time from list Vietnam's Festial Day
-- Animation when time up **(Not finished)**
-- Change background
+- Animation when time up
+- Localstorage with select day from List Option, Calendar
+- Change background with localStorage
 - Responsive **(Not finished)**
 
 Link to review **[Countdown App](https://countdown-vn.netlify.app/)**
