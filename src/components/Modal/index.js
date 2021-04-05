@@ -1,14 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import {
 	ModalBox,
-	ModalButton,
-	ModalClose,
 	ModalImage,
 	ModalContent,
 	ModaElement,
 	ModalText,
 } from './Modal.styles';
-import _ from 'lodash';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectBackground, changeBackground, openModal } from '../../redux';
 import { Button } from 'antd';

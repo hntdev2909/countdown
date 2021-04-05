@@ -1,5 +1,5 @@
 import axios from 'axios';
 
 export async function callAPI() {
-	return await axios.get('http://localhost:5000/countdown');
+	return await axios.get('https://server-intern-idra.herokuapp.com/countdown');
 }

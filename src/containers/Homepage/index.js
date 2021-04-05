@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { GlobalStyle } from '../../globalStyled';
-import { Main, ContainerApp, Copyright } from './Homepage.styles';
+import { Main, ContainerApp } from './Homepage.styles';
 import {
 	Countdown,
 	DateTimePicker,
 	Slider,
 	BackgroundChoice,
 	Modal,
-	Loading,
 	EndCountdown,
 } from '../../components';
 import { useSelector, useDispatch } from 'react-redux';
