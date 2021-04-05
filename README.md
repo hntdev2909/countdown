@@ -1,6 +1,7 @@
 # Project Countdown
 
 Project to understand how props are transmitted between components before coming to redux
+And using Nodejs to call API with list festival days
 
 ## Installation, package and libraries
 
@@ -8,6 +9,7 @@ Project to understand how props are transmitted between components before coming
 - [Antd Calendar](https://ant.design/)
 - [Momentjs](https://momentjs.com/)
 - [Lodash](https://lodash.com/)
+- [Nodejs](https://nodejs.org/en/)
 
 ## Usage
 
