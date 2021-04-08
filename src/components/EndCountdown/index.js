@@ -4,7 +4,7 @@ import { Button } from 'antd';
 import { useDispatch } from 'react-redux';
 import { resetTimeUp, resetDateTime } from '../../redux';
 
-function EndCountdown({ callback }) {
+function EndCountdown() {
 	const dispatch = useDispatch();
 
 	const handleReset = () => {
